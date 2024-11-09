@@ -1,11 +1,24 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import styles from "./ToDo.module.css";
 
+//useEffect(() => {}) //WIll run every time
+//useEffect(() => {}, []) //Will run only once when on mount the component
+//useEffect(() => {}, [dependencies]//Will run only when the dependencies values changes
 
 function ToDo() {
 
     const [tasks, setTasks] = useState(["Eat breakfast", "Take a shower", "Clean the glass"]);
     const [newTask, setNewTask] = useState("");
+    const [color, setColor] = useState("white");
+
+    useEffect(() => {
+        if (tasks.length > 3) {
+            setColor("red")
+        } else {
+            setColor("white")
+        }
+
+    }, [tasks]);
 
     function handleInputChange(event: any) {
         setNewTask(event.target.value);
@@ -54,12 +67,13 @@ function ToDo() {
             <ol>
                 {tasks.map((task: string, index: number) => (<li
                     key={index}>
-                        <span>{task}</span>
-                        <button className={styles.deleteButton} onClick={() => deleteTask(index)}>Delete</button>
-                        <button className={styles.moveButton} onClick={() => moveTaskUp(index)}>Up</button>
-                        <button className={styles.moveButton} onClick={() => moveTaskDown(index)}>Down</button>
+                    <span>{task}</span>
+                    <button className={styles.deleteButton} onClick={() => deleteTask(index)}>Delete</button>
+                    <button className={styles.moveButton} onClick={() => moveTaskUp(index)}>Up</button>
+                    <button className={styles.moveButton} onClick={() => moveTaskDown(index)}>Down</button>
                 </li>))}
             </ol>
+            <h1 style={{color: color}}>Task: {tasks.length}</h1>
 
         </div>
     );
